@@ -20,7 +20,8 @@ install_system_deps: &install_system_deps
     name: Install system dependencies
     command: |
       apt update
-      apt install -y unzip astyle
+      apt install -y unzip astyle ruby
+      gem install mdl
 
 defaults: &defaults
   working_directory: ~/repo
@@ -47,6 +48,7 @@ jobs:
       - run: mix compile
       - run: mix test
       - run: mix docs
+      - run: mdl --style .circleci/md-style.rb *.md
       - run: mix dialyzer --halt-exit-status
       - save_cache:
           key: v1-mix-cache-{{ checksum "mix.lock" }}
